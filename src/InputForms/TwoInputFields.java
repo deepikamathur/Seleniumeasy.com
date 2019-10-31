@@ -20,7 +20,6 @@ public class TwoInputFields {
 		addTwoInputs("-10", "6", "-4", driver);
 		addTwoInputs("-10", "-6", "-16", driver);
 		addTwoInputs("", "10", "NaN", driver);
-		addTwoInputs("", "", "NaN", driver);
 		addTwoInputs("1000000000000", "1000000000000", "2000000000000", driver);
 
 		driver.quit();
