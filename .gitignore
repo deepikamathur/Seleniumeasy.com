@@ -3,3 +3,4 @@ test-output/
 .settings/org.eclipse.jdt.core.prefs
 .classpath
 .project
+.DS_Store
