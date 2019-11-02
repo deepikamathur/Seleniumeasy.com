@@ -4,44 +4,35 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
-public class MultipleCheckBoxDemo {
-	public static void main(String args[]) throws InterruptedException {
+public class MultipleCheckBoxDemoTestNG {
+
+	WebDriver driver;
+	int[] noOptions = new int[] {};
+	int[] unselectOptions = new int[] { 1, 3 };
+
+	@BeforeTest
+	public void openBrowser() {
 		System.setProperty("webdriver.chrome.driver", "/Users/prmathur/Desktop/Deepika/selenium/chromedriver");
-		WebDriver driver = new ChromeDriver();
+		driver = new ChromeDriver();
 		driver.get("https://www.seleniumeasy.com/test/");
-
-		
-		  int[] noOptions = new int[] {};
-		  int[] unselectOptions = new int[] { 1, 3 };
-		  
-		  int[] optionsToSelectTest1 = new int[] { 1 }; testMultipleCheckBox(driver,
-		  optionsToSelectTest1, noOptions, "Check All");
-		  
-		  int[] optionsToSelectTest2 = new int[] { 1, 3 }; 
-		  testMultipleCheckBox(driver,
-		  optionsToSelectTest2, noOptions, "Check All");
-		  
-		  int[] optionsToSelectTest3 = new int[] { 1, 2, 3, 4 };
-		  testMultipleCheckBox(driver, optionsToSelectTest3, noOptions, "Uncheck All");
-		  
-		  int[] optionsToSelectTest4 = new int[] { 1, 2, 3, 4 };
-		  testMultipleCheckBox(driver, optionsToSelectTest4, unselectOptions,
-		  "Check All");
-		 
-		
-		testCheckAllButton(driver);
-
-		Thread.sleep(1000);
-		driver.quit();
-
 	}
 
-	public static void testMultipleCheckBox(WebDriver driver, int[] selectOptions, int[] unselectOptions,
-			String expectedValue) {
-
+	@BeforeMethod
+	public void navigateToPage() {
 		driver.findElement(By.cssSelector("#treemenu > li > ul > li:nth-child(1) > a")).click();
 		driver.findElement(By.cssSelector("#treemenu > li > ul > li:nth-child(1) > ul > li:nth-child(2) > a")).click();
+	}
+
+	
+	public void testMultipleCheckBox(int[] selectOptions, int[] unselectOptions,
+			String expectedValue) {
 
 		// Select options
 		for (int i = 0; i < selectOptions.length; i++) {
@@ -63,13 +54,39 @@ public class MultipleCheckBoxDemo {
 
 		String actualValue = element.getAttribute("value");
 
-		System.out.println(actualValue.equals(expectedValue));
+		Assert.assertEquals(actualValue, expectedValue);
 
 	}
 
-	public static void testCheckAllButton(WebDriver driver) {
-		driver.findElement(By.cssSelector("#treemenu > li > ul > li:nth-child(1) > a")).click();
-		driver.findElement(By.cssSelector("#treemenu > li > ul > li:nth-child(1) > ul > li:nth-child(2) > a")).click();
+	@Test
+	public void Test1() {
+		int[] optionsToSelectTest1 = new int[] { 1 };
+		testMultipleCheckBox(optionsToSelectTest1, noOptions, "Check All");
+
+	}
+
+	@Test
+	public void Test2() {
+		int[] optionsToSelectTest2 = new int[] { 1, 3 };
+		testMultipleCheckBox(optionsToSelectTest2, noOptions, "Check All");
+
+	}
+
+	@Test
+	public void Test3() {
+		int[] optionsToSelectTest3 = new int[] { 1, 2, 3, 4 };
+		testMultipleCheckBox(optionsToSelectTest3, noOptions, "Uncheck All");
+
+	}
+
+	@Test
+	public void Test4() {
+		int[] optionsToSelectTest4 = new int[] { 1, 2, 3, 4 };
+		testMultipleCheckBox(optionsToSelectTest4, unselectOptions, "Check All");
+	}
+
+
+	public void testCheckAllButton(WebDriver driver) {
 
 		driver.findElement(By.cssSelector("#check1")).click();
 
@@ -82,8 +99,8 @@ public class MultipleCheckBoxDemo {
 			allSelected = actualValue & allSelected;
 		}
 
-		System.out.println(allSelected);
-		
+		Assert.assertTrue(allSelected);
+
 		driver.findElement(By.cssSelector("#check1")).click();
 		boolean allUnselected = false;
 		for (int i = 0; i < 4; i++) {
@@ -94,9 +111,18 @@ public class MultipleCheckBoxDemo {
 			allUnselected = actualValue | allUnselected;
 		}
 
-		System.out.println(!allUnselected);
+		Assert.assertFalse(allUnselected);
+	}
 
+	@Test
+	public void Test5() {
+		testCheckAllButton(driver);
 
+	}
+
+	@AfterTest
+	public void closeBrowser() {
+		driver.quit();
 	}
 
 }
