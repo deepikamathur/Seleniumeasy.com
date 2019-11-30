@@ -102,6 +102,7 @@ public class SearchSelectDropDown {
 		Thread.sleep(1000);
 
 		driver.findElement(By.cssSelector("#select2-country-results > li:nth-child(7)")).click();
+		//Thread.sleep(1000);
 		String changedOutput = driver.findElement(By.xpath("//*[@id=\'select2-country-container\']")).getText();
 		Assert.assertEquals(changedOutput, "Japan");
 	}
